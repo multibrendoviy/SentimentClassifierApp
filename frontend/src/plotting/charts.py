@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib
 import plotly.graph_objects as go
 import seaborn as sns
-from wordcloud import WordCloud
 import json
 
 
@@ -118,7 +117,7 @@ def plot_kdeplot(
         },
         common_norm=False,
         palette="viridis",
-        shade=True,
+        fill=True,
     )
 
     ax.set_xlabel(col_name)

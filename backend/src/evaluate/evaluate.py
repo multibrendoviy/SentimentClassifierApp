@@ -8,7 +8,7 @@ import numpy as np
 
 from ..data.get_dataset import get_dataset
 from ..pipelines.get_embeddings import get_bert_embeddings
-from ..transform.transform import transform_data
+from ..transform.transform import pipeline_preprocess
 from ..train.train import model_load
 
 from transformers import Trainer
@@ -36,7 +36,7 @@ def pipeline_evaluate(config_path: str, data_path: str = None) -> list:
         test_data = get_dataset(preprocessing_config["test_path"])
 
     # Предобработка тестового датасета
-    test_data = transform_data(test_data, flg2eval=True)
+    test_data = pipeline_preprocess(test_data, flg2eval=True)
     test_dataset = get_bert_embeddings(test_data, train_config)
     # Загрузка модели Bert
     model = model_load(test_config)

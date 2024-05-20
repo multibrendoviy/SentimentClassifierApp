@@ -107,6 +107,7 @@ def prediction(file: UploadFile = File(...)):
     Предсказание модели по данным из файла
     """
     logger.info('Starting prediction from file...')
+
     predictions = pipeline_evaluate(
         config_path=CONFIG_PATH, data_path=file.file
     )

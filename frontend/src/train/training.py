@@ -3,7 +3,6 @@ import json
 from ..plotting.charts import plotting_trainer_stats
 import requests
 import streamlit as st
-import torch
 
 
 def start_training(config: dict, endpoint: object) -> None:
@@ -17,7 +16,7 @@ def start_training(config: dict, endpoint: object) -> None:
         old_metrics = {"roc_auc": 0, "precision": 0, "recall": 0, "f1": 0, "logloss": 0}
 
     with st.spinner("Training Bert... :)"):
-        st.write(f"Cuda is available: {torch.cuda.is_available()}")
+
         output = requests.post(endpoint, timeout=8000)
     st.success("Training complete!")
 

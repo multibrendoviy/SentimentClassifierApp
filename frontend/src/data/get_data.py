@@ -17,6 +17,28 @@ from itertools import chain
 from functools import lru_cache
 from typing import Dict, Tuple
 
+import re
+
+
+def clean_text(s: str) -> str:
+    """
+    Очистка текста после парсинга
+    """
+
+    # удаление пробелов в начале и в конце строки
+    s = s.strip()
+    # приведение букв в нижный регистр
+    s = s.lower()
+    # отделение пробелами символов ".", ",", "!", "?"
+    s = re.sub(r"([.,!?])", r" \1 ", s)
+    # заменить на пробелы все символы, кроме а-я, А-Я, ".", ",", "!", "?"
+    s = re.sub(r"[^а-яА-Я.,!?]+", " ", s)
+    # убрать дублирующие пробелы
+    s = re.sub(r"\s{2,}", " ", s)
+    # убрать пробелы в начале и в конце строки
+    s = s.strip()
+    return s
+
 
 @lru_cache(512)
 def get_data_for_eda(dataset_path: str) -> pd.DataFrame:
@@ -26,6 +48,7 @@ def get_data_for_eda(dataset_path: str) -> pd.DataFrame:
     :return: датафрейм
     """
     data = pd.read_csv(dataset_path)
+    data['reviewText'] = data.reviewText.transform(lambda x: clean_text(x))
 
     # Количество слов
     data["Words_count"] = data.reviewText.apply(lambda x: len(x.split()))
