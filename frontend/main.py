@@ -8,7 +8,6 @@ from src.data.get_data import load_data, get_data_for_eda, get_most_freq_words
 from src.data.get_reviews import start_scraping
 from src.plotting.charts import plot_bars, plot_boxplot, plot_kdeplot, plot_barplot
 
-
 CONFIG_PATH = "../config/config.yaml"
 
 

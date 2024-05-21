@@ -1,6 +1,5 @@
 import uvicorn
-import logging
-from logging.config import fileConfig
+
 from fastapi import FastAPI, HTTPException
 from fastapi import File
 from fastapi import UploadFile
@@ -21,10 +20,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-fileConfig('log.ini')
-logger = logging.getLogger(__name__)
-logger.info('Starting API...')
-
 app = FastAPI()
 
 
@@ -40,7 +35,7 @@ def welcome():
     Hello
     :return: None
     """
-    logger.info('Request for greeting message...')
+
     return {'message': 'Hello Data Scientist!'}
 
 
@@ -94,7 +89,7 @@ def training():
     """
     Обучение модели, логирование метрик
     """
-    logger.info('Starting training...')
+
     pipeline_training(config_path=CONFIG_PATH, requires_grad=True)
     metrics = load_metrics(config_path=CONFIG_PATH)
 
@@ -106,7 +101,6 @@ def prediction(file: UploadFile = File(...)):
     """
     Предсказание модели по данным из файла
     """
-    logger.info('Starting prediction from file...')
 
     predictions = pipeline_evaluate(
         config_path=CONFIG_PATH, data_path=file.file
@@ -122,7 +116,7 @@ def prediction_from_input(request: SentimentRequest):
         """
         Предсказание модели по введенному тексту
         """
-        logger.info('Starting prediction from input...')
+
         try:
 
             pipe = TextClassificationPipeline(
@@ -140,8 +134,6 @@ def prediction_from_input(request: SentimentRequest):
 @app.post("/scrape")
 def scrape_data_from_url(request: URLRequest):
     """Получение отзывов с сайта Otzovik.com"""
-
-    logger.info('Starting getting reviews...')
 
     try:
         get_reviews(config_path=CONFIG_PATH, url=request.url, page_count=request.page_count)
