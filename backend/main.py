@@ -1,5 +1,4 @@
 import uvicorn
-
 from fastapi import FastAPI, HTTPException
 from fastapi import File
 from fastapi import UploadFile
@@ -113,22 +112,22 @@ def prediction(file: UploadFile = File(...)):
 
 @app.post("/predict_from_input")
 def prediction_from_input(request: SentimentRequest):
-        """
-        Предсказание модели по введенному тексту
-        """
+    """
+    Предсказание модели по введенному тексту
+    """
 
-        try:
+    try:
 
-            pipe = TextClassificationPipeline(
-                        model=model_load(test_config),
-                        tokenizer=BertTokenizer.from_pretrained(train_config['tokenizer_path']),
-                        return_all_scores=True
-                    )
+        pipe = TextClassificationPipeline(
+                    model=model_load(test_config),
+                    tokenizer=BertTokenizer.from_pretrained(train_config['tokenizer_path']),
+                    return_all_scores=True
+                )
 
-            return pipe(request.text)[0]
+        return pipe(request.text)[0]
 
-        except ValidationError as e:
-            raise HTTPException(status_code=400, detail=e.errors())
+    except ValidationError as e:
+        raise HTTPException(status_code=400, detail=e.errors())
 
 
 @app.post("/scrape")

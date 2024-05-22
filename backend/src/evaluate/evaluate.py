@@ -5,13 +5,12 @@
 
 import yaml
 import numpy as np
+from transformers import Trainer
 
 from ..data.get_dataset import get_dataset
 from ..pipelines.get_embeddings import get_bert_embeddings
 from ..transform.transform import pipeline_preprocess
 from ..train.train import model_load
-
-from transformers import Trainer
 
 
 def pipeline_evaluate(config_path: str, data_path: str = None) -> list:
@@ -30,10 +29,6 @@ def pipeline_evaluate(config_path: str, data_path: str = None) -> list:
     # Если указан пусть к файлу
     if data_path:
         test_data = get_dataset(data_path)
-
-    else:
-        # Иначе взять файл с тестовыми данными уже имеющийся
-        test_data = get_dataset(preprocessing_config["test_path"])
 
     # Предобработка тестового датасета
     test_data = pipeline_preprocess(test_data, flg2eval=True)

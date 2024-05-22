@@ -1,14 +1,15 @@
 beautifulsoup4==4.12.3
+evaluate==0.4.2
 fastapi==0.111.0
 huggingface-hub==0.23.0
 joblib==1.4.2
 nltk==3.8.1
+matplotlib==3.8.0
 numpy==1.24.3
 pandas==2.2.2
 plotly==5.22.0
 pydantic==2.7.1
 python-multipart==0.0.9
-PyYAML==6.0.1
 PyYAML==6.0.1
 Requests==2.32.2
 rusenttokenize==0.0.5
@@ -22,7 +23,7 @@ torch==2.2.2+cu118
 tqdm==4.66.4
 transformers==4.40.2
 uvicorn==0.29.0
-
+urllib3==1.26.18
 
 
 

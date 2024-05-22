@@ -169,7 +169,7 @@ def exploratory():
     if most_freq:
 
         words, count = get_most_freq_words(data)
-        st.pyplot(plot_barplot(data, words, count), use_container_width=True)
+        st.pyplot(plot_barplot(words, count), use_container_width=True)
 
         st.write(
             "В топ-30 попали разные формы слов, касаемых непосредственно процесса покупки товаров, слов. "

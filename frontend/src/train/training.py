@@ -18,6 +18,7 @@ def start_training(config: dict, endpoint: object) -> None:
     with st.spinner("Training Bert... :)"):
 
         output = requests.post(endpoint, timeout=8000)
+
     st.success("Training complete!")
 
     new_metrics = output.json()["metrics"]

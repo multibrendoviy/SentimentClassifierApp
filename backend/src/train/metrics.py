@@ -14,11 +14,11 @@ from sklearn.metrics import (
     f1_score,
     log_loss,
 )
-
 import evaluate
 from scipy.special import softmax
 import transformers
 from ..tokenize.bert_embeddings import CustomDataset
+
 
 def create_dict_metrics(
     y_test: list, y_predict: np.ndarray, y_probability: np.ndarray

@@ -14,7 +14,7 @@ train:
   model_path: cointegrated/rubert-tiny2
   trainer_path: ../models/history
   trainer_log_path: ../models/history/history.json
-  epochs: 5
+  epochs: 2
   weight_decay: 0.01
   per_device_batch_size: 64
   batch_size_split: 10
