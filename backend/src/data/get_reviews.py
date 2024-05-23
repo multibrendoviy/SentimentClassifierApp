@@ -8,7 +8,6 @@ import re
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
 from tqdm.auto import tqdm
 import time
 import numpy as np
@@ -77,18 +76,9 @@ def get_reviews(config_path: str, url: str, page_count: int = 2) -> None:
     data = []
     base_url, page_num = get_request_params(url)
 
-    url = f"{base_url}/{int(page_num)}/"
-
-    # Запуск окна Firefox для решения капчи
-    driver = webdriver.Firefox()
-    driver.get(url)
-    time.sleep(10)
-    driver.quit()
-
     for i in tqdm(range(int(page_count))):
 
         url = f"{base_url}/{int(page_num) + i}/"
-
         session = get_session()
         response = session.get(url, cookies=cookies, headers=headers)
 
@@ -116,4 +106,3 @@ def get_reviews(config_path: str, url: str, page_count: int = 2) -> None:
 
     df = pd.Series(data, name='reviewText')
     df.to_csv(data_path, index=False)
-

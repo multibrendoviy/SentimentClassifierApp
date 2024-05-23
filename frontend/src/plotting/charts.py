@@ -160,7 +160,7 @@ def plotting_trainer_stats(config: str) -> matplotlib.figure.Figure:
 
 def plot_barplot(y, x):
 
-    fig = plt.figure(figsize=(8, 6))
+    fig = plt.figure(figsize=(8, 8))
     ax = sns.barplot(y=y, x=x, orient="h", palette="rocket")
 
     return fig

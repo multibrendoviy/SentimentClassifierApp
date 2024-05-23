@@ -10,7 +10,6 @@ import io
 import pandas as pd
 import numpy as np
 from rusenttokenize import ru_sent_tokenize
-from nltk.corpus import stopwords
 
 from collections import Counter
 from itertools import chain
@@ -69,7 +68,7 @@ def get_data_for_eda(dataset_path: str) -> pd.DataFrame:
     return data
 
 
-def get_most_freq_words(data: pd.DataFrame) -> tuple[list]:
+def get_most_freq_words(data: pd.DataFrame) -> tuple:
     """
     Получение списка самых используемых слов в корпусе отзывов
     :param data: датафрейм
@@ -93,17 +92,14 @@ def get_most_freq_words(data: pd.DataFrame) -> tuple[list]:
         "–",
         "--",
     ]
-    stop_words = stopwords.words("russian")
 
     # Корпус всех отзывов (без учета стоп-слов)
     corpus = [
         [
             word
             for word in rev.split()
-            if word not in punctuation_marks and word not in stop_words
-        ]
-        for rev in data.reviewText.tolist()
-    ]
+            if word not in punctuation_marks and len(word) > 3
+        ] for rev in data.reviewText.tolist()]
 
     # Словарь корпуса
     counter = Counter(chain(*corpus))

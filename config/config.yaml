@@ -27,4 +27,7 @@ endpoints:
   prediction_input: 'http://localhost:8000/predict_from_input'
   prediction_from_file: 'http://localhost:8000/predict'
   scrape: 'http://localhost:8000/scrape'
-
+#  train: 'http://fastapi:8000/train'
+#  prediction_input: 'http://fastapi:8000/predict_from_input'
+#  prediction_from_file: 'http://fastapi:8000/predict'
+#  scrape: 'http://fastapi:8000/scrape'

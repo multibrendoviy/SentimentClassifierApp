@@ -5,7 +5,7 @@
 import yaml
 from ..data.get_dataset import get_dataset
 from ..data.split_data import split_train_test, get_train_test_data
-from ..transform.transform import transform_labels, check_data, pipeline_preprocess
+from ..transform.transform import transform_labels, pipeline_preprocess
 from ..train.train import bert_training, save_model
 from ..pipelines.get_embeddings import get_bert_embeddings
 
