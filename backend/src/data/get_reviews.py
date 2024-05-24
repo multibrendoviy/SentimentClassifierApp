@@ -29,6 +29,8 @@ def get_request_params(url: str) -> tuple:
 
     if match:
         base_url = match.group(1)
+    else:
+        raise ValueError()
     match = re.search(pattern_num, url)
 
     if match:
@@ -80,16 +82,15 @@ def get_reviews(config_path: str, url: str, page_count: int = 2) -> None:
 
         url = f"{base_url}/{int(page_num) + i}/"
         session = get_session()
-        response = session.get(url, cookies=cookies, headers=headers)
+        response = session.get(url, headers=headers, cookies=cookies)
 
         soup = BeautifulSoup(response.text, 'html.parser')
         href_list = soup.find_all("a", class_="review-btn review-read-link")
 
         for j, link in enumerate(href_list):
 
-            if j % 3 == 0:
-                pause = np.random.uniform(0, 3)
-                time.sleep(pause)
+            pause = np.random.uniform(0, 2)
+            time.sleep(pause)
 
             # Проход циклом по всем ссылкам, полученным со страницы
             href = str(HOST + link["href"])

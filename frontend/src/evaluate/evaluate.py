@@ -78,8 +78,8 @@ def start_evaluate(endpoint: object, input: str) -> None:
 
     except requests.exceptions.RequestException:
         st.error(
-            f"Отзыв должен начинаться с русской буквы и содержать хотя бы одно слово, содержащее"
-            f"не менее 4 букв"
+            f"Отзыв должен начинаться с русской буквы или цифры и содержать хотя бы одно слово"
+            f" не менее 4 букв"
         )
 
 

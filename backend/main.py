@@ -40,16 +40,16 @@ def welcome():
 
 class SentimentRequest(BaseModel):
     """
-    Класс для валидации введенного пользователем отзыва
+    Валидация введенного пользователем отзыва
     """
     text: str
 
     @field_validator('text')
     @classmethod
     def check_input(cls, s: str):
-        # Проверка, что строка начинается с русской буквы
-        if not re.match(r'^[а-яА-Я]', s):
-            raise ValueError('Отзыв должен начинаться с русской буквы.')
+        # Проверка, что строка начинается с русской буквы или цифры
+        if not re.match(r'^[а-яА-Я0-9]', s):
+            raise ValueError('Отзыв должен начинаться с русской буквы или цифры.')
 
         # Проверка, что в строке есть хотя бы одно русское слово не менее 4 букв
         if not re.search(r'\b[а-яА-Я]{4,}\b', s):
@@ -60,7 +60,7 @@ class SentimentRequest(BaseModel):
 
 class URLRequest(BaseModel):
     """
-    Класс для валидации введенного URL-запроса
+    Валидации введенного URL-запроса
     """
     url: str
     page_count: int

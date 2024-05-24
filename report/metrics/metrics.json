@@ -1,1 +1,1 @@
-{"roc_auc": 0.963, "precision": 0.894, "recall": 0.903, "f1": 0.899, "logloss": 1.143}
+{"roc_auc": 0.968, "precision": 0.909, "recall": 0.906, "f1": 0.907, "logloss": 1.038}

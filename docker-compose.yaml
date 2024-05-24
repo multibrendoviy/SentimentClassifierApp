@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  fastapi:
+    build: backend/
+    ports:
+      - 8000:8000
+    networks:
+      - deploy_network
+    container_name: fastapi
+    volumes:
+        - ./data:/app/data/
+        - ./config:/app/config
+        - ./models:/app/models
+        - ./report:/app/report
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+
+  streamlit:
+    build: frontend/
+    depends_on:
+      - fastapi
+    ports:
+        - 8501:8501
+    networks:
+      - deploy_network
+    container_name: streamlit
+    volumes:
+        - ./data:/app/data/
+        - ./config:/app/config
+        - ./models:/app/models
+        - ./report:/app/report
+
+networks:
+  deploy_network:
+    driver: bridge

@@ -223,10 +223,12 @@ def prediction_from_file():
 
 def get_some_reviews():
     st.markdown("# Get some reviews from otzovik")
+
     with open(CONFIG_PATH) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
+
     endpoint = config["endpoints"]["scrape"]
-    start_scraping(endpoint=endpoint)
+    start_scraping(config, endpoint=endpoint)
 
 
 def main():

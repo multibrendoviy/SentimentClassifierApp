@@ -14,7 +14,7 @@ train:
   model_path: cointegrated/rubert-tiny2
   trainer_path: ../models/history
   trainer_log_path: ../models/history/history.json
-  epochs: 2
+  epochs: 5
   weight_decay: 0.01
   per_device_batch_size: 64
   batch_size_split: 10
@@ -23,11 +23,11 @@ test:
   model_path: ../models/bert-tiny2
   evaluate_path: ../data/check/test_data.csv
 endpoints:
-  train: 'http://localhost:8000/train'
-  prediction_input: 'http://localhost:8000/predict_from_input'
-  prediction_from_file: 'http://localhost:8000/predict'
-  scrape: 'http://localhost:8000/scrape'
-#  train: 'http://fastapi:8000/train'
-#  prediction_input: 'http://fastapi:8000/predict_from_input'
-#  prediction_from_file: 'http://fastapi:8000/predict'
-#  scrape: 'http://fastapi:8000/scrape'
+#  train: 'http://localhost:8000/train'
+#  prediction_input: 'http://localhost:8000/predict_from_input'
+#  prediction_from_file: 'http://localhost:8000/predict'
+#  scrape: 'http://localhost:8000/scrape'
+  train: 'http://fastapi:8000/train'
+  prediction_input: 'http://fastapi:8000/predict_from_input'
+  prediction_from_file: 'http://fastapi:8000/predict'
+  scrape: 'http://fastapi:8000/scrape'
