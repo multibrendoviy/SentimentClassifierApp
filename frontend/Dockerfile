@@ -11,7 +11,7 @@ RUN apt-get update && \
         gcc
 
 RUN pip install --upgrade pip && \
-    pip install --ignore-installed -r requirements.txt
+    pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 
 EXPOSE 8501

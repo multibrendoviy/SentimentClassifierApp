@@ -10,7 +10,7 @@ def start_evaluate(endpoint: object, input: str) -> None:
     """
     Получение входных данных путем ввода в UI> вывод результата
     :param endpoint: endpoint
-    :param input_: введенный текст
+    :param input: введенный текст
     """
 
     data = {"text": input}

@@ -15,7 +15,7 @@ RUN apt-get update && \
 
 
 RUN pip install --upgrade pip && \
-    pip install --ignore-installed -r requirements.txt
+    pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 
 EXPOSE 8000
