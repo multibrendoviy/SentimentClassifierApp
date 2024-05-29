@@ -2,7 +2,6 @@
 Программа: Получение метрик
 Версия: 1.0
 """
-
 import json
 
 import numpy as np
@@ -28,7 +27,7 @@ def create_dict_metrics(
     :param y_test: реальные данные
     :param y_predict: предсказанные значения
     :param y_probability: предсказанные вероятности
-    :return: словарь с метриками
+    :return словарь с метриками
     """
     dict_metrics = {
         "roc_auc": round(roc_auc_score(y_test, y_probability[:, 1]), 3),
@@ -77,7 +76,7 @@ def save_metrics(
         json.dump(result_metrics, file)
 
 
-def load_metrics(config_path: str) -> dict:
+def load_metrics(config_path: str) -> str:
     """
     Получение метрик из файла
     :param config_path: путь до конфигурационного файла

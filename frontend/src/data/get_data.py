@@ -2,119 +2,34 @@
 Программа: Получение данных по пути и чтение
 Версия: 1.0
 """
+
 import streamlit as st
 
-from io import BytesIO
+from io import BytesIO, StringIO
 import io
-
+import requests
+import json
 import pandas as pd
-import numpy as np
-from rusenttokenize import ru_sent_tokenize
-
-from collections import Counter
-from itertools import chain
-from functools import lru_cache
 from typing import Dict, Tuple
 
-import re
 
-
-def clean_text(s: str) -> str:
+@st.cache_data
+def get_eda_stats(endpoint: object) -> Tuple[pd.DataFrame, list, list]:
     """
-    Очистка текста после парсинга
+    Кэширование результатов запроса датафрейма и списка топ-30 слов для визуализации данных
+    :param endpoint: endpount
+    :return data: датафрейм для EDA
+    :return words: список топ-30 слов
+    :return count: количество употребления слов в корпусе
     """
+    response = requests.post(endpoint, timeout=8000)
+    data_csv = StringIO(response.json()["data_csv"])
 
-    # удаление пробелов в начале и в конце строки
-    s = s.strip()
-    # приведение букв в нижный регистр
-    s = s.lower()
-    # отделение пробелами символов ".", ",", "!", "?"
-    s = re.sub(r"([.,!?])", r" \1 ", s)
-    # заменить на пробелы все символы, кроме а-я, А-Я, ".", ",", "!", "?"
-    s = re.sub(r"[^а-яА-Я.,!?]+", " ", s)
-    # убрать дублирующие пробелы
-    s = re.sub(r"\s{2,}", " ", s)
-    # убрать пробелы в начале и в конце строки
-    s = s.strip()
-    return s
+    words = json.loads(response.json()["words"])
+    count = json.loads(response.json()["count"])
+    data = pd.read_csv(data_csv)
 
-
-@lru_cache(512)
-def get_data_for_eda(dataset_path: str) -> pd.DataFrame:
-    """
-    Загрузка датасета из файла и вычисление статистик для EDA-анализа
-    :param dataset_path: путь к файлу
-    :return: датафрейм
-    """
-    data = pd.read_csv(dataset_path)
-    data['reviewText'] = data.reviewText.transform(lambda x: clean_text(x))
-
-    # Количество слов
-    data["Words_count"] = data.reviewText.apply(lambda x: len(x.split()))
-
-    # Количество отзывов
-    data["Sentences_count"] = data.reviewText.apply(lambda x: len(ru_sent_tokenize(x)))
-    # Длина отзывов, выраженная количеством символов
-    data["Review_length"] = data.reviewText.str.len()
-
-    # Средняя длина слов
-    data["Mean_word_length"] = data.reviewText.apply(
-        lambda x: np.mean([len(t) for t in x.split()])
-    )
-    # Средняя длина предложений
-    data["Mean_sentence_length"] = data.reviewText.apply(
-        lambda rev: np.mean([len(sent) for sent in ru_sent_tokenize(rev)])
-    )
-    return data
-
-
-def get_most_freq_words(data: pd.DataFrame) -> tuple:
-    """
-    Получение списка самых используемых слов в корпусе отзывов
-    :param data: датафрейм
-    :return: words: список слов
-    :return: count: сколько раз слово встречается в корпусе
-    """
-    punctuation_marks = [
-        "!",
-        ",",
-        "(",
-        ")",
-        ":",
-        "-",
-        "?",
-        ".",
-        "..",
-        "...",
-        "«",
-        "»",
-        ";",
-        "–",
-        "--",
-    ]
-
-    # Корпус всех отзывов (без учета стоп-слов)
-    corpus = [
-        [
-            word
-            for word in rev.split()
-            if word not in punctuation_marks and len(word) > 3
-        ] for rev in data.reviewText.tolist()]
-
-    # Словарь корпуса
-    counter = Counter(chain(*corpus))
-
-    # Отсортированные по убыванию пары словаря (слово - количество употреблений в корпусе)
-    most = counter.most_common()
-
-    words = []
-    count = []
-
-    # 30 самых часто встречаемых слов в словаре
-    for term in most[:30]:
-        words.append(term[0])
-        count.append(term[1])
-    return words, count
+    return data, words, count
 
 
 def load_data(

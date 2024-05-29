@@ -2,6 +2,7 @@
 Программа выполнения пайплайна обучения Bert
 Версия 1.0
 """
+
 import yaml
 from ..data.get_dataset import get_dataset
 from ..data.split_data import split_train_test, get_train_test_data
@@ -13,9 +14,9 @@ from ..pipelines.get_embeddings import get_bert_embeddings
 def pipeline_training(config_path: dict, requires_grad: bool = False) -> None:
     """
     Пайплайн обучения модели Bert
-    :param config_path: конфигурационный файл
+    :param config_path: конфигурационный словарь
     :param requires_grad: обновление весовых коэффициентов
-    :return:
+    :return: None
     """
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)

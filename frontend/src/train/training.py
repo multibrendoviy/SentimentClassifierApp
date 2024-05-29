@@ -1,3 +1,9 @@
+"""
+Программа: Запуск пайплайна обучения модели Bert
+и визуализация validation loss, ROC-AUC
+Версия: 1.0
+"""
+
 import os
 import json
 from ..plotting.charts import plotting_trainer_stats
@@ -6,6 +12,11 @@ import streamlit as st
 
 
 def start_training(config: dict, endpoint: object) -> None:
+    """
+    Запуск и визуализация обучения модели
+    :param config: конфигурационный словарь
+    :param endpoint: endpoint
+    """
 
     train_config = config["train"]
     if os.path.exists(train_config["metrics_path"]):

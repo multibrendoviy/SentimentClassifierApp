@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split
 def split_train_test(data: pd.DataFrame, preprocessing_config: dict) -> None:
     """
     Разделение датасета на обучающий и тестовый с сохранением в csv файл
-    :param: data - датасет
-    :param: preprocessing_config - конфигурационный файл
+    :param data: dataframe
+    :param preprocessing_config: словарь с конфигурацией
     """
 
     train_data, test_data = train_test_split(
@@ -30,9 +30,10 @@ def split_train_test(data: pd.DataFrame, preprocessing_config: dict) -> None:
 def get_train_test_data(data: pd.DataFrame, preprocessing_config: dict) -> tuple:
     """
     Разделение датафрейма на тестовый и обучающий
-    :param data:
-    :param preprocessing_config:
-    :return: кортеж датафреймов
+    :param data: dataframe
+    :param preprocessing_config: словарь с конфигурацией
+    :return train_data
+    :return test_data
     """
     train_data, test_data = train_test_split(
         data,

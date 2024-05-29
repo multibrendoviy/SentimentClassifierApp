@@ -4,7 +4,7 @@ import os
 
 from src.train.training import start_training
 from src.evaluate.evaluate import start_evaluate, start_evaluate_from_file
-from src.data.get_data import load_data, get_data_for_eda, get_most_freq_words
+from src.data.get_data import load_data, get_eda_stats
 from src.data.get_reviews import start_scraping
 from src.plotting.charts import plot_bars, plot_boxplot, plot_kdeplot, plot_barplot
 
@@ -56,9 +56,11 @@ def exploratory():
     st.markdown("# Exploratory data analysis")
     with open(CONFIG_PATH) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
+    endpoint = config["endpoints"]["exploratory"]
 
-    data = get_data_for_eda(dataset_path=config["preprocessing"]["train_path"])
+    data, words, count = get_eda_stats(endpoint=endpoint)
     st.write(data.head())
+
     review_stats = st.sidebar.checkbox("Статистика отзывов")
     count_word_sent = st.sidebar.checkbox("Количество слов и предложений в отзывах")
     review_length = st.sidebar.checkbox("Длина отзывов")
@@ -167,9 +169,7 @@ def exploratory():
         )
 
     if most_freq:
-
-        words, count = get_most_freq_words(data)
-        st.pyplot(plot_barplot(words, count), use_container_width=True)
+        st.pyplot(plot_barplot(y=words, x=count), use_container_width=True)
 
         st.write(
             "В топ-30 попали разные формы слов, касаемых непосредственно процесса покупки товаров, слов. "
@@ -179,18 +179,22 @@ def exploratory():
 
 def training():
     st.markdown("# Training Bert")
+
     with open(CONFIG_PATH) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
     endpoint = config["endpoints"]["train"]
+
     if st.button("Start training"):
         start_training(config=config, endpoint=endpoint)
 
 
 def prediction():
     st.markdown("# Prediction")
+
     with open(CONFIG_PATH) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
     endpoint = config["endpoints"]["prediction_input"]
+
     form = st.form(key="sentiment")
     user_input = form.text_area("Введите текст отзыва")
     predict = form.form_submit_button("Predict")
@@ -204,12 +208,12 @@ def prediction():
 
 def prediction_from_file():
     st.markdown("# Prediction from file")
+
     with open(CONFIG_PATH) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
     endpoint = config["endpoints"]["prediction_from_file"]
 
-    upload_file = st.file_uploader("", type=["csv"],
-                                   accept_multiple_files=False)
+    upload_file = st.file_uploader("", type=["csv"], accept_multiple_files=False)
     if upload_file:
         dataset_csv_df, files = load_data(data=upload_file, type_data="test")
         # проверка на наличие сохраненной модели
@@ -241,8 +245,7 @@ def main():
         "Prediction from file": prediction_from_file,
         "Get some reviews": get_some_reviews,
     }
-    selected_page = st.sidebar.selectbox("Выберите пункт",
-                                         page_names_to_funcs.keys())
+    selected_page = st.sidebar.selectbox("Выберите пункт", page_names_to_funcs.keys())
     page_names_to_funcs[selected_page]()
 
 

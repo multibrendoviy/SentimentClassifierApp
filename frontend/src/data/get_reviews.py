@@ -1,9 +1,19 @@
+"""
+Программа: Получение отзывов
+Версия: 1.0
+"""
+
 import pandas as pd
 import streamlit as st
 import requests
 
 
 def start_scraping(config: dict, endpoint: object) -> None:
+    """
+    Получение введенных пользователем данных и запуск программы парсинга
+    :param config: пусть к конфигурационному файлу
+    :param endpoint: endpoint
+    """
 
     with st.form("url"):
         url = st.text_input(
@@ -31,14 +41,14 @@ def start_scraping(config: dict, endpoint: object) -> None:
                     " Для выполнения предсказания перейдите"
                     "в раздел Prediction from file"
                 )
-                df = pd.read_csv(config['preprocessing']['scrape_path'])
+                df = pd.read_csv(config["preprocessing"]["scrape_path"])
                 st.write(df.head())
                 csv = df.to_csv(index=False)
                 st.download_button(
-                    label='Download File',
+                    label="Download File",
                     data=csv,
-                    file_name='sparse_dataframe.csv',
-                    mime='text/csv'
+                    file_name="sparse_dataframe.csv",
+                    mime="text/csv",
                 )
 
             except requests.exceptions.RequestException:

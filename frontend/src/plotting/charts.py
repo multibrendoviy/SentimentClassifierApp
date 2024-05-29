@@ -1,12 +1,13 @@
 import pandas as pd
+import json
+
 import matplotlib.pyplot as plt
 import matplotlib
 import plotly.graph_objects as go
 import seaborn as sns
-import json
 
 
-def plot_text(ax: plt.Axes):
+def plot_text(ax: plt.Axes) -> None:
     """
     Выводит процентные значения на столбчатой диаграмме.
 
@@ -133,22 +134,11 @@ def plotting_trainer_stats(config: str) -> matplotlib.figure.Figure:
     :return:
     """
     with open(config["trainer_log_path"], "r") as json_file:
-        steps = json.load(json_file)
-
-    auc = []
-    eval_loss = []
-
-    for step in steps:
-        try:
-            auc.append(step["eval_roc_auc"])
-            eval_loss.append(step["eval_loss"])
-
-        except KeyError:
-            continue
+        stats = json.load(json_file)
 
     fig, axes = plt.subplots(ncols=2, figsize=(10, 5))
-    sns.lineplot(eval_loss, ax=axes[0], color="orange")
-    sns.lineplot(auc, ax=axes[1])
+    sns.lineplot(stats["eval_loss"], ax=axes[0], color="orange")
+    sns.lineplot(stats["auc"], ax=axes[1])
 
     axes[0].set_title("Validation Loss")
     axes[1].set_title("ROC-AUC SCORE")

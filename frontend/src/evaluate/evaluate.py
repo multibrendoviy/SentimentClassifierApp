@@ -4,38 +4,23 @@ import requests
 from io import BytesIO
 
 from ..plotting.charts import get_sentiment_emoji, create_sentiment_plot
-from collections import Counter
-
-
-def get_sentiment_stats(preds: list) -> dict:
-    """
-    Получение статистики классификации модели по данным из файла
-    :param preds: предсказания модели
-    :return: словарь со относительным количеством позитивных/негативных предсказаний
-    """
-    counter = Counter(preds)
-    return {
-        "Negative": f"{round(counter[0] / len(preds) * 100, 1)} %",
-        "Positive": f"{round(counter[1] / len(preds) * 100, 1)} %",
-    }
 
 
 def start_evaluate(endpoint: object, input: str) -> None:
     """
     Получение входных данных путем ввода в UI> вывод результата
     :param endpoint: endpoint
-    :param input: введенный текст
-    :return:
+    :param input_: введенный текст
     """
+
     data = {"text": input}
     try:
         response = requests.post(endpoint, timeout=8000, json=data)
         response.raise_for_status()
         output = response.json()
 
-        max_label = max(output, key=lambda x: x["score"])
         # Предсказанная метка
-        predicted_label = max_label["label"]
+        predicted_label = output["Predicted_label"]
 
         col1, col2, col3 = st.columns([2, 2, 2])
         st.markdown(
@@ -54,17 +39,17 @@ def start_evaluate(endpoint: object, input: str) -> None:
 
         with col1:
             # Вывод эмоджи
-            st.write(f"Результат: {max_label['label']}!")
+            st.write(f"Результат: {predicted_label}!")
             sentiment_emoji = get_sentiment_emoji(predicted_label, size=120)
             st.markdown(f"{sentiment_emoji}", unsafe_allow_html=True)
 
         with col2:
             # Вывод словаря с вероятностями принадлежности к классам
-            st.write(*output)
+            st.write(output["Probabilities"])
 
         with col3:
             # Построение барплота вероятностей
-            probabilities = {item["label"]: item["score"] for item in output}
+            probabilities = output["Probabilities"]
             fig = create_sentiment_plot(
                 probabilities,
                 width=200,
@@ -83,13 +68,14 @@ def start_evaluate(endpoint: object, input: str) -> None:
         )
 
 
-def start_evaluate_from_file(data: pd.DataFrame, endpoint: object, files: BytesIO):
+def start_evaluate_from_file(
+    data: pd.DataFrame, endpoint: object, files: BytesIO
+) -> None:
     """
     Получение входных данных путем загрузки из файла> вывод результата
     :param data: датасет
     :param endpoint: endpoint
     :param files:
-    :return:
     """
 
     button_ok = st.button("Predict")
@@ -99,8 +85,8 @@ def start_evaluate_from_file(data: pd.DataFrame, endpoint: object, files: BytesI
         with st.spinner("Making predictions..."):
 
             output = requests.post(endpoint, files=files, timeout=8000)
-            data_["predict"] = output.json()["prediction"]
-            stats = get_sentiment_stats(data_.predict.tolist())
+            data_["predict"] = output.json()["predictions"]
+            stats = output.json()["stats"]
             st.write(data_.head())
             fig = create_sentiment_plot(
                 stats,

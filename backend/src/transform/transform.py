@@ -4,9 +4,10 @@
 """
 
 import pandas as pd
-from ..tokenize.clean_text import clean_text
+from ..tokenize.text_processing import clean_text
 from typing import Union
 import numpy as np
+
 
 def transform_labels(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -28,7 +29,7 @@ def check_data(data: Union[pd.DataFrame, pd.Series]) -> Union[pd.DataFrame, pd.S
     # Если Series - проверить тип данных
     if isinstance(data, pd.Series):
         if data.dtype in [str, object]:
-            data = pd.DataFrame(data, columns=['reviewText'])
+            data = pd.DataFrame(data, columns=["reviewText"])
             return data
         else:
             raise TypeError("Неверный тип данных в серии.")
@@ -42,14 +43,14 @@ def check_data(data: Union[pd.DataFrame, pd.Series]) -> Union[pd.DataFrame, pd.S
         elif len(cols) == 2:
             for col in cols:
                 if data[col].dtype in [str, object]:
-                    data['reviewText'] = data[col]
+                    data["reviewText"] = data[col]
 
-                elif data[col].dtype in [int, np.int32, np.int64, 'int32', 'int64']:
-                    data['label'] = data[col]
+                elif data[col].dtype in [int, np.int32, np.int64, "int32", "int64"]:
+                    data["label"] = data[col]
 
                 else:
                     try:
-                        data['label'] = data[col].astype(int)
+                        data["label"] = data[col].astype(int)
 
                     except TypeError as t:
                         raise t
@@ -75,7 +76,7 @@ def check_data(data: Union[pd.DataFrame, pd.Series]) -> Union[pd.DataFrame, pd.S
 
 def pipeline_preprocess(
     data: Union[pd.DataFrame, pd.Series], flg2eval=False
-) -> Union[pd.DataFrame, pd.Series]:
+) -> pd.DataFrame:
     """
     Пайплайн предобработки датасета
     :param: data - датасет

@@ -38,7 +38,7 @@ def bert_training(
     :param eval_dataset: датасет для предсказания на валидационный выборке
     :param test_dataset: тестовый датасет для оценки метрик
     :param requires_grad: обновление весовых коэффициентов
-    :return: объект Trainer, включающий в себя обученную модель
+    :return Trainer, включающий в себя обученную модель
     """
 
     # Параметры для обучения
@@ -74,9 +74,7 @@ def bert_training(
     trainer.train()
 
     # Сохранение метрик
-    save_metrics(
-        test_dataset,trainer, train_config["metrics_path"]
-    )
+    save_metrics(test_dataset, trainer, train_config["metrics_path"])
 
     # Cохранение логов обучения модели
     save_log_history(train_config, trainer)
@@ -124,5 +122,22 @@ def save_log_history(train_config: dict, trainer: transformers.Trainer) -> None:
     :param train_config: конфигурационный файл
     :param trainer: объект trainer обучавший модель
     """
+
+    auc = []
+    eval_loss = []
+
+    for step in trainer.state.log_history:
+        try:
+            auc.append(step["eval_roc_auc"])
+            eval_loss.append(step["eval_loss"])
+
+        except KeyError:
+            continue
+
+    stats = {
+        "auc": auc,
+        "eval_loss": eval_loss
+    }
+
     with open(train_config["trainer_log_path"], "w") as json_file:
-        json.dump(trainer.state.log_history, json_file)
+        json.dump(stats, json_file)

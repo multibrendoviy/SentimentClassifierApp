@@ -28,7 +28,7 @@ class PrepareData:
 
     def transform(self):
         N = len(self.texts)
-        size_split = N // self.batch_size_split
+        size_split = (N // self.batch_size_split) or N
 
         train_encodings = self.pre_tokenizer(self.texts[:size_split])
         input_ids = train_encodings["input_ids"]
