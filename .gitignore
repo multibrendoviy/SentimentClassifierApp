@@ -17,3 +17,5 @@ __pycache__/
 
 **/runs/
 /backend/logfile.log
+
+/models/bert-tiny2/
