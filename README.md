@@ -7,7 +7,7 @@
 
 Источник отзывов - otzovik.com
 
-<img src="demo/demo.gif" width="900" height="450" />
+<img src="demo/demo.gif" width="900" height="550" />
 
 ___
 
