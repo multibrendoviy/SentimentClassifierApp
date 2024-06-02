@@ -70,9 +70,9 @@ scrape: 'http://localhost:8000/scrape'
 #scrape: 'http://fastapi:8000/scrape'
  ```
 
-Далее необходимо в папке mlops_sentiment_project создать файл `requirements.txt`, скопировать в него содержимое файлов
-`backend/requirments.txt`, `frontend/requirments.txt`. Так же, добавить строку 
-`torch==2.2.0+cu118`. В случае отсутсвия GPU с поддержкой CUDA установите `torch==2.2.0`.
+Далее необходимо в папке mlops_sentiment_project создать виртуальное окружение и установить необходимые пакеты командой
+
+`pip install requirments.txt`
 
 После установки пакетов в виртуальное окружение можно запускать приложение.
 Сначала необходимо запустить Fastapi. Далее запускаете Streamlit.
